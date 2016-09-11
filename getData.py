@@ -31,4 +31,4 @@ def init(interval):
 	getData()
 
 if __name__ == "__main__":
-	init(3)
+	init(300)
