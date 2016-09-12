@@ -21,7 +21,7 @@ def checkFile():
 def getData(stockList):
 	s_list = stockList
 	prefix = "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.quotes%20where%20symbol%20in%20(%22"
-	sufix = "%22)%0A%09%09&format=json&diagnostics=true&env=http%3A%2F%2Fdatatables.org%2Falltables.env&callback="
+	sufix = "%22)%0A%09%09&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback="
 	for i in s_list:
 		prefix += i + '%22%2C%22'
 	prefix = prefix[0:-9];
