@@ -18,17 +18,35 @@ def checkFile():
 		f = open('./files/'+prefix, 'w')
 		return f
 
-def getData():
-	s_list = ['GOOG', 'AAPL']
-	url = "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.quotes%20where%20symbol%20in%20(%22YHOO%22%2C%22AAPL%22%2C%22GOOG%22%2C%22MSFT%22)%0A%09%09&format=json&diagnostics=true&env=http%3A%2F%2Fdatatables.org%2Falltables.env&callback="
+def getData(stockList):
+	s_list = stockList
+	prefix = "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.quotes%20where%20symbol%20in%20(%22"
+	sufix = "%22)%0A%09%09&format=json&diagnostics=true&env=http%3A%2F%2Fdatatables.org%2Falltables.env&callback="
+	for i in s_list:
+		prefix += i + '%22%2C%22'
+	prefix = prefix[0:-9];
+	prefix += sufix
+	# url = "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.quotes%20where%20symbol%20in%20(%22YHOO%22%2C%22AAPL%22%2C%22GOOG%22%2C%22MSFT%22)%0A%09%09&format=json&diagnostics=true&env=http%3A%2F%2Fdatatables.org%2Falltables.env&callback="
 	f = checkFile()
 	if f:
-		data = requests.get(url)
+		data = requests.get(prefix)
 		json.dump(data.json(), f)
 
-def init(interval):
-	threading.Timer(interval, init, [interval]).start()
-	getData()
+def getStockList(filename):
+	f = open(filename, 'r')
+	content = f.readlines()
+	ret = []
+	for line in content:
+		l = line.split(' ')
+		# print l[len(l)-1].strip()[1:-1]
+		ret.append(l[len(l)-1].strip()[1:-1])
+	return ret
+
+def init(interval, stockList):
+	print "Get data"
+	threading.Timer(interval, init, [interval, stockList]).start()
+	getData(stockList)
 
 if __name__ == "__main__":
-	init(300)
+	stockList = getStockList("./files/stock_list")
+	init(60, stockList)
