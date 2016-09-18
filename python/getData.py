@@ -11,12 +11,12 @@ from datetime import datetime, timedelta
 def checkFile():
 	prefix = time.strftime('%Y_%m_%d_%H_%M_%S')
 	exit = False
-	for filename in listdir('./files'):
+	for filename in listdir('../data'):
 		if filename == prefix:
 			exit = True
 			break;
 	if exit == False:
-		f = open('./files/'+prefix, 'w')
+		f = open('../data/'+prefix, 'w')
 		return f
 
 def getData(stockList):
@@ -46,15 +46,14 @@ def getStockList(filename):
 def init(interval, stockList):
 	print "Get data"
 	threading.Timer(interval, init, [interval, stockList]).start()	 
-        from pytz import timezone
-	eastern = timezone('US/Eastern')
-	fmt = '%Y-%m-%d %H:%M:%S %Z%z'	
-	loc_dt = eastern.localize(time.gmtime())
-	print loc_dt.strftime(fmt)
-	
+    #from pytz import timezone
+	#eastern = timezone('US/Eastern')
+	#fmt = '%Y-%m-%d %H:%M:%S %Z%z'
+	#loc_dt = eastern.localize(time.gmtime())
+	print time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
 	
 	getData(stockList)
 
 if __name__ == "__main__":
-	stockList = getStockList("./files/stock_list")
+	stockList = getStockList("../files/stock_list")
 	init(10, stockList)
