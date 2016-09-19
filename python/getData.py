@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from flask import Flask
 from flaskext.mysql import MySQL
 import requests
@@ -11,9 +13,8 @@ from datetime import datetime, timedelta
 import pandas as pd
 from pandas.tseries.holiday import USFederalHolidayCalendar as calendar
 
-def checkFile():
-	pacific_time = datetime.now(timezone('US/Pacific'))
-	prefix = pacific_time.strftime('%Y_%m_%d_%H_%M_%S')
+def checkFile(prefix):
+	
 	exit = False
 	for filename in listdir('../data'):
 		if filename == prefix:
@@ -24,20 +25,28 @@ def checkFile():
 		return f
 
 def getData(stockList):
+	listSize = 1200
 	s_list = stockList
-	#print stockList
 	prefix = "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.quotes%20where%20symbol%20in%20(%22"
 	sufix = "%22)%0A%09%09&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback="
-	for i in s_list:
-		prefix += i + '%22%2C%22'
-	prefix = prefix[0:-9];
-	prefix += sufix
-	# url = "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.quotes%20where%20symbol%20in%20(%22YHOO%22%2C%22AAPL%22%2C%22GOOG%22%2C%22MSFT%22)%0A%09%09&format=json&diagnostics=true&env=http%3A%2F%2Fdatatables.org%2Falltables.env&callback="
-	f = checkFile()
-	if f:
-		print prefix
-		data = requests.get(prefix)
-		json.dump(data.json(), f)
+	pacific_time = datetime.now(timezone('US/Pacific'))
+	for j in range(0, len(stockList) / listSize + 1):
+		print j
+		query = prefix
+		for i in s_list[listSize*j:min(listSize*(j+1),len(stockList))]:
+			query += i + '%22%2C%22'
+		query = query[0:-9];
+		query += sufix
+			# url = "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.quotes%20where%20symbol%20in%20(%22YHOO%22%2C%22AAPL%22%2C%22GOOG%22%2C%22MSFT%22)%0A%09%09&format=json&diagnostics=true&env=http%3A%2F%2Fdatatables.org%2Falltables.env&callback="
+		
+		filename = pacific_time.strftime('%Y_%m_%d_%H_%M_%S') + '_part' + str(j+1)
+		f = checkFile(filename)
+
+		print f
+		if f:
+			#print query
+			data = requests.get(query)
+			json.dump(data.json(), f)
 
 def getStockList(filename):
 	f = open(filename, 'r')
@@ -51,16 +60,15 @@ def getStockList(filename):
 	return ret
 
 def init(interval, stockList):
-	print "Get data"
 	threading.Timer(interval, init, [interval, stockList]).start()
-
 	cal = calendar()
 	holidays = cal.holidays(start='2014-01-01', end='2020-12-31').to_pydatetime()
 	fmt = "%Y-%m-%d %H:%M:%S %Z%z"
 	pacific_time = datetime.now(timezone('US/Pacific'))
 	eastern_time = datetime.now(timezone('US/Eastern'))
 	timenow = eastern_time.hour + float(eastern_time.minute) / 60
-	if not(datetime.now().date() in holidays) and (datetime.now().isoweekday() in range(6, 8)) and timenow >= 9 and timenow <= 19:
+	if not(datetime.now().date() in holidays) and (datetime.now().isoweekday() in range(1, 6)) and timenow >= 9 and timenow <= 16:
+		print "Get data"
 		print time.strftime("%Y-%m-%d %H:%M:%S %Z%z", time.gmtime())
 		fmt = "%Y-%m-%d %H:%M:%S %Z%z"
 		pacific_time = datetime.now(timezone('US/Pacific'))
@@ -69,7 +77,7 @@ def init(interval, stockList):
 		print eastern_time.strftime(fmt)
 		getData(stockList)
 	else:
-		print 'Market is closed now'
+		print 'Market is closed now and current time is ' +  eastern_time.strftime(fmt)
 
 	#getData(stockList)
 
