@@ -16,7 +16,7 @@ def download_page(url):
             f.write(tds[1].string + '\n')
 
 
-f = open('stock_names.txt', 'w')
+f = open('../files/stock_names.txt', 'w')
 
 url_part1 = 'http://en.wikipedia.org/wiki/Companies_listed_on_the_New_York_Stock_Exchange_'
 url = url_part1 + '(0-9)'
