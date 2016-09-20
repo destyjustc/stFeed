@@ -1,6 +1,6 @@
 from datetime import datetime
 from pytz import timezone
-from os import listdir
+import os
 import urllib2
 import ftplib
 
@@ -15,7 +15,7 @@ def fetch_file(remoteFile, localFile):
     ftp.login()
     ftp.cwd("symboldirectory")
     exit = False
-    for filename in listdir(prefix):
+    for filename in os.listdir(prefix):
         if filename == localFile:
             exit = True
             break;
@@ -25,7 +25,7 @@ def fetch_file(remoteFile, localFile):
     ftp.quit()
 
 def getTicker(fout, filename):
-
+    global count
     url_part1 = 'http://ichart.finance.yahoo.com/table.csv?s='
     url_part2 = '&d=8&e=12&f=2016&g=d&a=8&b=1&c=2016&sn=a&ignore=.csv'
     with(open(filename, 'r')) as fin:
@@ -61,14 +61,14 @@ def fetch_Ticker_list():
     stockTicker = "stockTicker_" + eastern_time.strftime('%Y_%m_%d') + ".txt"
 
     exit = False
-    for filename in listdir(prefix):
+    for filename in os.listdir(prefix):
         if filename == stockTicker:
             exit = True
             break
-    if exit == False:
+    if exit == False or os.stat(prefix + stockTicker).st_size == 0:
         fout = open(prefix + stockTicker, 'w')
         getTicker(fout, prefix + localFile1)
         getTicker(fout, prefix + localFile2)
         fout.close()
 
-fetch_Ticker_list()
+
