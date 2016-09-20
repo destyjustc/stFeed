@@ -10,8 +10,18 @@ import time
 import threading
 from pytz import timezone
 from datetime import datetime, timedelta
+import os
 import pandas as pd
 from pandas.tseries.holiday import USFederalHolidayCalendar as calendar
+
+def checkfolder(folder):
+	exit = False
+	for foldername in listdir('../data'):
+		if foldername == folder:
+			exit = True;
+			break;
+	if exit == False :
+		os.makedirs('../data/' +folder)
 
 def checkFile(prefix):
 	
@@ -39,7 +49,10 @@ def getData(stockList):
 		query += sufix
 			# url = "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.quotes%20where%20symbol%20in%20(%22YHOO%22%2C%22AAPL%22%2C%22GOOG%22%2C%22MSFT%22)%0A%09%09&format=json&diagnostics=true&env=http%3A%2F%2Fdatatables.org%2Falltables.env&callback="
 		
-		filename = pacific_time.strftime('%Y_%m_%d_%H_%M_%S') + '_part' + str(j+1)
+
+		folder = pacific_time.strftime('%Y_%m_%d')
+		checkfolder(folder)
+		filename = folder + '/' + pacific_time.strftime('%Y_%m_%d_%H_%M_%S')
 		f = checkFile(filename)
 
 		print f
@@ -67,7 +80,7 @@ def init(interval, stockList):
 	pacific_time = datetime.now(timezone('US/Pacific'))
 	eastern_time = datetime.now(timezone('US/Eastern'))
 	timenow = eastern_time.hour + float(eastern_time.minute) / 60
-	if not(datetime.now().date() in holidays) and (datetime.now().isoweekday() in range(1, 6)) and timenow >= 9 and timenow <= 16:
+	if not(datetime.now().date() in holidays) and (datetime.now().isoweekday() in range(1, 6)) and timenow >= 9 and timenow <= 17:
 		print "Get data"
 		print time.strftime("%Y-%m-%d %H:%M:%S %Z%z", time.gmtime())
 		fmt = "%Y-%m-%d %H:%M:%S %Z%z"
