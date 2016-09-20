@@ -34,12 +34,12 @@ def getTicker(fout, filename):
     for line in lines[1:-1]:
         ticker =  line.split('|')[0]
         url = url_part1 + ticker + url_part2
+        print url
         try:
-            # This will cause exception on a 404
             response = urllib2.urlopen(url)
             count = count + 1
-            fout.write(ticker + '\n')
             print "ticker %d : %s " % (count, ticker)
+            fout.write(ticker + '\n')
         except Exception, e:
             print e.code
             print e.msg
@@ -61,16 +61,14 @@ def fetch_Ticker_list():
     stockTicker = "stockTicker_" + eastern_time.strftime('%Y_%m_%d') + ".txt"
 
     exit = False
-    print listdir(prefix)
     for filename in listdir(prefix):
-        print filename
         if filename == stockTicker:
             exit = True
             break
-
-
     if exit == False:
         fout = open(prefix + stockTicker, 'w')
         getTicker(fout, prefix + localFile1)
         getTicker(fout, prefix + localFile2)
         fout.close()
+
+fetch_Ticker_list()
