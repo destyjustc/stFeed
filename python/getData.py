@@ -3,13 +3,14 @@
 
 import requests
 import json
-from os import listdir, walk
+from os import listdir
 import time
 import threading
 from pytz import timezone
-from datetime import datetime, timedelta
+from datetime import datetime
 import os
 from pandas.tseries.holiday import USFederalHolidayCalendar as calendar
+import fetch_Nasdaq_list
 
 def checkfolder(folder):
 	exit = False
@@ -66,16 +67,19 @@ def getStockList(filename):
 		ret.append(line.strip())
 	return ret
 
-def init(interval, stockList):
-	threading.Timer(interval, init, [interval, stockList]).start()
+def init(interval):
+	pacific_time = datetime.now(timezone('US/Pacific'))
+	eastern_time = datetime.now(timezone('US/Eastern'))
+	fetch_Nasdaq_list.fetch_Ticker_list()
+	stockTicker = "../data/list/stockTicker_" + eastern_time.strftime('%Y_%m_%d') + ".txt"
+	stockList = getStockList(stockTicker)
+	threading.Timer(interval, init, [interval]).start()
 	cal = calendar()
 	holidays = cal.holidays(start='2014-01-01', end='2020-12-31').to_pydatetime()
 	fmt = "%Y-%m-%d %H:%M:%S %Z%z"
-	pacific_time = datetime.now(timezone('US/Pacific'))
-	eastern_time = datetime.now(timezone('US/Eastern'))
 	timenow = eastern_time.hour + float(eastern_time.minute) / 60
-	if not(datetime.now().date() in holidays) and (datetime.now().isoweekday() in range(1, 6)) and timenow >= 9 and timenow <= 17:
-		print "Get data"
+	if not(datetime.now().date() in holidays) and (datetime.now().isoweekday() in range(1, 6)) and timenow >= 0 and timenow <= 20:
+		print "Get data from " + stockTicker
 		print time.strftime("%Y-%m-%d %H:%M:%S %Z%z", time.gmtime())
 		print pacific_time.strftime(fmt)
 		print eastern_time.strftime(fmt)
@@ -86,5 +90,4 @@ def init(interval, stockList):
 	#getData(stockList)
 
 if __name__ == "__main__":
-	stockList = getStockList("../files/stock_names.txt")
-	init(60, stockList)
+	init(60)
