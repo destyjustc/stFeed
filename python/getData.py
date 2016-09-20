@@ -41,18 +41,15 @@ def getData(stockList):
 	sufix = "%22)%0A%09%09&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback="
 	pacific_time = datetime.now(timezone('US/Pacific'))
 	for j in range(0, len(stockList) / listSize + 1):
-		print j
 		query = prefix
 		for i in s_list[listSize*j:min(listSize*(j+1),len(stockList))]:
 			query += i + '%22%2C%22'
 		query = query[0:-9];
 		query += sufix
 			# url = "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.quotes%20where%20symbol%20in%20(%22YHOO%22%2C%22AAPL%22%2C%22GOOG%22%2C%22MSFT%22)%0A%09%09&format=json&diagnostics=true&env=http%3A%2F%2Fdatatables.org%2Falltables.env&callback="
-		
-
 		folder = pacific_time.strftime('%Y_%m_%d')
 		checkfolder(folder)
-		filename = folder + '/' + pacific_time.strftime('%Y_%m_%d_%H_%M_%S')
+		filename = folder + '/' + pacific_time.strftime('%Y_%m_%d_%H_%M_%S') + '_part' + str(j+1)
 		f = checkFile(filename)
 
 		print f
@@ -80,7 +77,7 @@ def init(interval, stockList):
 	pacific_time = datetime.now(timezone('US/Pacific'))
 	eastern_time = datetime.now(timezone('US/Eastern'))
 	timenow = eastern_time.hour + float(eastern_time.minute) / 60
-	if not(datetime.now().date() in holidays) and (datetime.now().isoweekday() in range(1, 6)) and timenow >= 9 and timenow <= 17:
+	if not(datetime.now().date() in holidays) and (datetime.now().isoweekday() in range(1, 6)) and timenow >= 0 and timenow <= 24:
 		print "Get data"
 		print time.strftime("%Y-%m-%d %H:%M:%S %Z%z", time.gmtime())
 		fmt = "%Y-%m-%d %H:%M:%S %Z%z"
