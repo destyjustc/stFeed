@@ -61,10 +61,14 @@ def fetch_Ticker_list():
     stockTicker = "stockTicker_" + eastern_time.strftime('%Y_%m_%d') + ".txt"
 
     exit = False
+    print listdir(prefix)
     for filename in listdir(prefix):
+        print filename
         if filename == stockTicker:
             exit = True
-        break
+            break
+
+
     if exit == False:
         fout = open(prefix + stockTicker, 'w')
         getTicker(fout, prefix + localFile1)
