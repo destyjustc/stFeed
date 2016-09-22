@@ -52,10 +52,10 @@ def init(interval):
     holidays = cal.holidays(start='2014-01-01', end='2020-12-31').to_pydatetime()
     fmt = "%Y-%m-%d %H:%M:%S %Z%z"
     timenow = eastern_time.hour + float(eastern_time.minute) / 60
-    if not(datetime.now().date() in holidays) and (datetime.now().isoweekday() in range(1, 6)) and timenow >= 0 and timenow <= 6:
+    if not(datetime.now().date() in holidays) and (datetime.now().isoweekday() in range(1, 6)) and timenow >= 0 and timenow <= 4:
         fetch_Ticker_lists.fetch_Ticker_list()
     stockTickerList = ["NASDAQ", "NASDAQTest", "NYSE", "NYSEARCA", "NYSEMKT", "BATS", "OtherTest" ]
-    if not(datetime.now().date() in holidays) and (datetime.now().isoweekday() in range(1, 6)) and timenow >= 0 and timenow <= 20:
+    if not(datetime.now().date() in holidays) and (datetime.now().isoweekday() in range(1, 6)) and timenow >= 4 and timenow <= 20:
         for i in range(0,6) :
             stockTicker = stockTickerList[i]
             print "Get data from " + stockTicker + ' @ ' + eastern_time.strftime(fmt)
