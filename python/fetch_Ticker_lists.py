@@ -34,7 +34,7 @@ def getNASDAQTicker(fout1, fout2, filename):
         try:
             data = requests.get(query).json()
             if data["query"]["results"] is None  :
-                print "result is null"
+                print "result is null" + ticker
             else:
                 if test == 'Y' :
                     countNASDAQtest = countNASDAQtest + 1
@@ -71,7 +71,8 @@ def getOtherTicker(fout1, fout2, fout3, fout4, fout5, filename):
             data = requests.get(query).json()
             #  response = urllib2.urlopen(url)
             if data["query"]["results"] is None  :
-                print "result is null"
+                print "result is null" + ticker
+
             else:
                 if test == 'Y' :
                     countTest = countTest + 1
@@ -113,6 +114,7 @@ def fetch_Ticker_list():
 
     stockTicker1 = "NASDAQstockTicker.txt"
     stockTicker2 = "NASDAQTeststockTicker.txt"
+    stockTickerNULL =  "NULLstockTicker.txt"
     exit1 = False
     for filename in os.listdir(prefix):
         if filename == stockTicker1:
@@ -127,9 +129,11 @@ def fetch_Ticker_list():
     if exit1 == False or exit2 == False or os.stat(prefix + stockTicker1).st_size == 0 or os.stat(prefix + stockTicker2).st_size == 0:
         fout1 = open(prefix + eastern_time.strftime(fmt) + '/' + stockTicker1, 'w')
         fout2 = open(prefix + eastern_time.strftime(fmt) + '/' + stockTicker2, 'w')
+        foutNULL = open(prefix + eastern_time.strftime(fmt) + '/' + stockTickerNULL, 'a')
         getNASDAQTicker(fout1, fout2, prefix + eastern_time.strftime(fmt) + '/' + localFile1)
         fout1.close()
         fout2.close()
+
 
     stockTicker1 = "NYSEMKTstockTicker.txt"
     stockTicker2 = "NYSEstockTicker.txt"
