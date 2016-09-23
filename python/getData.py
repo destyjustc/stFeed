@@ -55,16 +55,17 @@ def init(interval):
     timenow = eastern_time.hour + float(eastern_time.minute) / 60
     if not(datetime.now().date() in holidays) and (datetime.now().isoweekday() in range(1, 6)) and timenow >= 0 and timenow <= 4 :
         fetch_Ticker_lists.fetch_Ticker_list()
-    stockTickerList = ["NASDAQ", "NASDAQTest", "NYSE", "NYSEARCA", "NYSEMKT", "BATS", "OtherTest", "TickerNULL" ]
+    threading.Timer(interval, init, [interval]).start()
+    stockTickerList = ["NASDAQ", "NASDAQTest", "NYSE", "NYSEARCA", "NYSEMKT", "BATS", "OtherTest" ]
     if not(datetime.now().date() in holidays) and (datetime.now().isoweekday() in range(1, 6)) and timenow >= 4 and timenow <= 20:
-        for i in range(0,7) :
+        for i in range(0,6) :
             stockTicker = stockTickerList[i]
             print "Get data from " + stockTicker + ' @ ' + eastern_time.strftime(fmt)
             stockList = getStockList(stockTicker, eastern_time)
             getData(stockList, stockTicker)
     else :
         print 'Market is closed now and current time is ' +  eastern_time.strftime(fmt)
-    threading.Timer(interval, init, [interval]).start()
+
 
 
 if __name__ == "__main__":

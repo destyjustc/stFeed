@@ -69,33 +69,38 @@ def getOtherTicker(fout1, fout2, fout3, fout4, fout5, foutNULL, filename):
         query = prefix + ticker + sufix
         # print query
         try:
-            data = requests.get(query).json()
-            #  response = urllib2.urlopen(url)
-            if data["query"]["results"] is None  :
-                print "result is null for " + ticker
-                foutNULL.write(ticker + '\n')
-            else:
-                if test == 'Y' :
-                    countTest = countTest + 1
-                    print "Other test ticker %d : %s " % (countTest, ticker)
-                    fout5.write(ticker + '\n')
+            data = requests.get(query)
+            if data.status_code == 400 :
+                print "No json for " + ticker
+                foutNULL.write(ticker + ' 400 \n')
+            else :
+                data = data.json()
+                 #  response = urllib2.urlopen(url)
+                if data["query"]["results"] is None  :
+                    print "result is null for " + ticker
+                    foutNULL.write(ticker + '\n')
                 else:
-                    if Exchange == 'A':
-                        countNYSEMKT = countNYSEMKT + 1
-                        print "NYSEMKT ticker %d : %s " % (countNYSEMKT, ticker)
-                        fout1.write(ticker + '\n')
-                    if Exchange == 'N':
-                        countNYSE = countNYSE + 1
-                        print "NYSE ticker %d : %s " % (countNYSE, ticker)
-                        fout2.write(ticker + '\n')
-                    if Exchange == 'P':
-                        countNYSEARCA = countNYSEARCA + 1
-                        print "NYSEMKTARCA ticker %d : %s " % (countNYSEARCA, ticker)
-                        fout3.write(ticker + '\n')
-                    if Exchange == 'Z':
-                        countBATS = countBATS + 1
-                        print "BATS ticker %d : %s " % (countBATS, ticker)
-                        fout4.write(ticker + '\n')
+                    if test == 'Y' :
+                        countTest = countTest + 1
+                        print "Other test ticker %d : %s " % (countTest, ticker)
+                        fout5.write(ticker + '\n')
+                    else:
+                        if Exchange == 'A':
+                            countNYSEMKT = countNYSEMKT + 1
+                            print "NYSEMKT ticker %d : %s " % (countNYSEMKT, ticker)
+                            fout1.write(ticker + '\n')
+                        if Exchange == 'N':
+                            countNYSE = countNYSE + 1
+                            print "NYSE ticker %d : %s " % (countNYSE, ticker)
+                            fout2.write(ticker + '\n')
+                        if Exchange == 'P':
+                            countNYSEARCA = countNYSEARCA + 1
+                            print "NYSEMKTARCA ticker %d : %s " % (countNYSEARCA, ticker)
+                            fout3.write(ticker + '\n')
+                        if Exchange == 'Z':
+                            countBATS = countBATS + 1
+                            print "BATS ticker %d : %s " % (countBATS, ticker)
+                            fout4.write(ticker + '\n')
         except requests.exceptions.RequestException as e:
             print e
             pass
