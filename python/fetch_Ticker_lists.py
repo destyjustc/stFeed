@@ -63,7 +63,7 @@ def getOtherTicker(fout1, fout2, fout3, fout4, fout5, foutNULL, filename):
     fin.close()
     for line in lines[1:-1]:
         split =  line.split('|')
-        ticker = split[7]
+        ticker = split[7][:-2]
         Exchange = split[2]
         test = split[6]
         query = prefix + ticker + sufix
@@ -72,7 +72,7 @@ def getOtherTicker(fout1, fout2, fout3, fout4, fout5, foutNULL, filename):
             data = requests.get(query)
             if data.status_code == 400 :
                 print "No json for " + ticker
-                foutNULL.write(ticker + ' 400 \n')
+                foutNULL.write(ticker + ' 400 ')
             else :
                 data = data.json()
                  #  response = urllib2.urlopen(url)
