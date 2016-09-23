@@ -63,7 +63,7 @@ def getOtherTicker(fout1, fout2, fout3, fout4, fout5, foutNULL, filename):
     fin.close()
     for line in lines[1:-1]:
         split =  line.split('|')
-        ticker = split[0]
+        ticker = split[7]
         Exchange = split[2]
         test = split[6]
         query = prefix + ticker + sufix
