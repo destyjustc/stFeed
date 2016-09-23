@@ -72,7 +72,7 @@ def getOtherTicker(fout1, fout2, fout3, fout4, fout5, foutNULL, filename):
             data = requests.get(query)
             if data.status_code == 400 :
                 print "No json for " + ticker
-                foutNULL.write(ticker + ' 400 ')
+                foutNULL.write(ticker + ' code: 400 ')
             else :
                 data = data.json()
                  #  response = urllib2.urlopen(url)
