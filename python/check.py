@@ -2,7 +2,6 @@ import os
 
 def checkFolder(folder, prefix):
     exit = False
-    aa = os.listdir(prefix)
     for foldername in os.listdir(prefix):
         if foldername == folder:
             exit = True

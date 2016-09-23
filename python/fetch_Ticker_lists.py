@@ -18,7 +18,7 @@ def fetch_file(remoteFile, localFile, folder):
         f.close()
     ftp.quit()
 
-def getNASDAQTicker(fout1, fout2, filename):
+def getNASDAQTicker(fout1, fout2, foutNULL, filename):
     countNASDAQ = 0
     countNASDAQtest = 0
     prefix = "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.quotes%20where%20symbol%20in%20(%22"
@@ -34,7 +34,8 @@ def getNASDAQTicker(fout1, fout2, filename):
         try:
             data = requests.get(query).json()
             if data["query"]["results"] is None  :
-                print "result is null" + ticker
+                print "result is null for " + ticker
+                foutNULL.write(ticker + '\n')
             else:
                 if test == 'Y' :
                     countNASDAQtest = countNASDAQtest + 1
@@ -49,7 +50,7 @@ def getNASDAQTicker(fout1, fout2, filename):
             pass
 
 
-def getOtherTicker(fout1, fout2, fout3, fout4, fout5, filename):
+def getOtherTicker(fout1, fout2, fout3, fout4, fout5, foutNULL, filename):
     countNYSEMKT = 0
     countNYSE = 0
     countNYSEARCA = 0
@@ -71,12 +72,12 @@ def getOtherTicker(fout1, fout2, fout3, fout4, fout5, filename):
             data = requests.get(query).json()
             #  response = urllib2.urlopen(url)
             if data["query"]["results"] is None  :
-                print "result is null" + ticker
-
+                print "result is null for " + ticker
+                foutNULL.write(ticker + '\n')
             else:
                 if test == 'Y' :
                     countTest = countTest + 1
-                    print "NASDAQ test ticker %d : %s " % (countTest, ticker)
+                    print "Other test ticker %d : %s " % (countTest, ticker)
                     fout5.write(ticker + '\n')
                 else:
                     if Exchange == 'A':
@@ -102,37 +103,32 @@ def getOtherTicker(fout1, fout2, fout3, fout4, fout5, filename):
 
 
 def fetch_Ticker_list():
-    prefix = '../data/list/'
     eastern_time = datetime.now(timezone('US/Eastern'))
+    fmt = '%Y_%m_%d'
+    prefix = '../data/list/' + eastern_time.strftime(fmt) + '/'
     localFile1 = "NASDAQ.txt"
     localFile2 = "NASDAQ_Other.txt"
     remoteFile1 = "nasdaqlisted.txt"
     remoteFile2 = "otherlisted.txt"
-    fmt = '%Y_%m_%d'
+
     fetch_file(remoteFile1, localFile1, eastern_time.strftime(fmt))
     fetch_file(remoteFile2, localFile2, eastern_time.strftime(fmt))
 
     stockTicker1 = "NASDAQstockTicker.txt"
     stockTicker2 = "NASDAQTeststockTicker.txt"
     stockTickerNULL =  "NULLstockTicker.txt"
-    exit1 = False
-    for filename in os.listdir(prefix):
-        if filename == stockTicker1:
-            exit1 = True
-            break
-    exit2 = False
-    for filename in os.listdir(prefix):
-        if filename == stockTicker2:
-            exit2 = True
-            break
+    exit1 = check.checkFile(stockTicker1, prefix )
+    exit2 = check.checkFile(stockTicker2, prefix )
+
 
     if exit1 == False or exit2 == False or os.stat(prefix + stockTicker1).st_size == 0 or os.stat(prefix + stockTicker2).st_size == 0:
-        fout1 = open(prefix + eastern_time.strftime(fmt) + '/' + stockTicker1, 'w')
-        fout2 = open(prefix + eastern_time.strftime(fmt) + '/' + stockTicker2, 'w')
-        foutNULL = open(prefix + eastern_time.strftime(fmt) + '/' + stockTickerNULL, 'a')
-        getNASDAQTicker(fout1, fout2, prefix + eastern_time.strftime(fmt) + '/' + localFile1)
+        fout1 = open(prefix + stockTicker1, 'w')
+        fout2 = open(prefix + stockTicker2, 'w')
+        foutNULL = open(prefix + stockTickerNULL, 'a')
+        getNASDAQTicker(fout1, fout2, foutNULL, prefix  + localFile1)
         fout1.close()
         fout2.close()
+        foutNULL.close()
 
 
     stockTicker1 = "NYSEMKTstockTicker.txt"
@@ -143,24 +139,26 @@ def fetch_Ticker_list():
 
     count = 0
 
-    for filename in os.listdir(prefix):
+    for filename in os.listdir(prefix ):
         if filename == stockTicker1 or filename == stockTicker2 or filename == stockTicker3 or filename == stockTicker4 or filename == stockTicker5:
             count = count + 1
         if count == 5:
             break
 
     if count < 5 or os.stat(prefix + stockTicker1).st_size == 0 or os.stat(prefix + stockTicker2).st_size == 0 or os.stat(prefix + stockTicker3).st_size == 0 or os.stat(prefix + stockTicker4).st_size == 0 or os.stat(prefix + stockTicker5).st_size == 0:
-        fout1 = open(prefix + eastern_time.strftime(fmt) + '/' + stockTicker1, 'w')
-        fout2 = open(prefix + eastern_time.strftime(fmt) + '/' + stockTicker2, 'w')
-        fout3 = open(prefix + eastern_time.strftime(fmt) + '/' + stockTicker3, 'w')
-        fout4 = open(prefix + eastern_time.strftime(fmt) + '/' + stockTicker4, 'w')
-        fout5 = open(prefix + eastern_time.strftime(fmt) + '/' + stockTicker5, 'w')
-        getOtherTicker(fout1, fout2, fout3, fout4, fout5, prefix + eastern_time.strftime(fmt) + '/' + localFile2)
+        fout1 = open(prefix  + stockTicker1, 'w')
+        fout2 = open(prefix  + stockTicker2, 'w')
+        fout3 = open(prefix  + stockTicker3, 'w')
+        fout4 = open(prefix  + stockTicker4, 'w')
+        fout5 = open(prefix  + stockTicker5, 'w')
+        foutNULL = open(prefix  + stockTickerNULL, 'a')
+        getOtherTicker(fout1, fout2, fout3, fout4, fout5, foutNULL, prefix  + localFile2)
         fout1.close()
         fout2.close()
         fout3.close()
         fout4.close()
         fout5.close()
+        foutNULL.close()
 
 
    # getTicker(fout, prefix + localFile2)

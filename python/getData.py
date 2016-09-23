@@ -33,6 +33,8 @@ def getData(stockList, stockTicker):
             data = requests.get(query)
             json.dump(data.json(), f)
 
+
+# getData(stockList)
 def getStockList(stockTicker, eastern_time):
     filename = "../data/list/" + eastern_time.strftime('%Y_%m_%d') + '/' + stockTicker  + "stockTicker.txt"
     f = open(filename, 'r')
@@ -47,23 +49,24 @@ def getStockList(stockTicker, eastern_time):
 
 def init(interval):
     eastern_time = datetime.now(timezone('US/Eastern'))
-    threading.Timer(interval, init, [interval]).start()
     cal = calendar()
     holidays = cal.holidays(start='2014-01-01', end='2020-12-31').to_pydatetime()
     fmt = "%Y-%m-%d %H:%M:%S %Z%z"
     timenow = eastern_time.hour + float(eastern_time.minute) / 60
-    if not(datetime.now().date() in holidays) and (datetime.now().isoweekday() in range(1, 6)) and timenow >= 0 and timenow <= 4:
+    if not(datetime.now().date() in holidays) and (datetime.now().isoweekday() in range(1, 6)) and timenow >= 0 and timenow <= 4 :
         fetch_Ticker_lists.fetch_Ticker_list()
-    stockTickerList = ["NASDAQ", "NASDAQTest", "NYSE", "NYSEARCA", "NYSEMKT", "BATS", "OtherTest" ]
+    stockTickerList = ["NASDAQ", "NASDAQTest", "NYSE", "NYSEARCA", "NYSEMKT", "BATS", "OtherTest", "TickerNULL" ]
     if not(datetime.now().date() in holidays) and (datetime.now().isoweekday() in range(1, 6)) and timenow >= 4 and timenow <= 20:
-        for i in range(0,6) :
+        for i in range(0,7) :
             stockTicker = stockTickerList[i]
             print "Get data from " + stockTicker + ' @ ' + eastern_time.strftime(fmt)
             stockList = getStockList(stockTicker, eastern_time)
             getData(stockList, stockTicker)
     else :
         print 'Market is closed now and current time is ' +  eastern_time.strftime(fmt)
+    threading.Timer(interval, init, [interval]).start()
 
-    #getData(stockList)
+
 if __name__ == "__main__":
     init(60)
+
