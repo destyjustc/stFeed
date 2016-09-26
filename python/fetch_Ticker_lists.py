@@ -115,10 +115,10 @@ def fetch_Ticker_list():
     localFile2 = "NASDAQ_Other.txt"
     remoteFile1 = "nasdaqlisted.txt"
     remoteFile2 = "otherlisted.txt"
-    num_lines_NASDAQ = sum(1 for line in open(prefix + localFile1))
-    num_lines_Other = sum(1 for line in open(prefix + localFile2))
     fetch_file(remoteFile1, localFile1, eastern_time.strftime(fmt))
     fetch_file(remoteFile2, localFile2, eastern_time.strftime(fmt))
+    num_lines_NASDAQ = sum(1 for line in open(prefix + localFile1))
+    num_lines_Other = sum(1 for line in open(prefix + localFile2))
     stockTicker = ["NASDAQstockTicker.txt", "NASDAQTeststockTicker.txt", "NASDAQNULLstockTicker.txt"]
     num_lines_NASDAQstock = 2
     for i in range(0,3):
