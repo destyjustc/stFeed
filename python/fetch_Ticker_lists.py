@@ -72,13 +72,13 @@ def getOtherTicker(fout1, fout2, fout3, fout4, fout5, foutNULL, filename):
             data = requests.get(query)
             if data.status_code == 400 :
                 print "No json for " + ticker
-                foutNULL.write(ticker + ' code: 400 ')
+                foutNULL.write(ticker + ' error code: 400 \n')
             else :
                 data = data.json()
                  #  response = urllib2.urlopen(url)
                 if data["query"]["results"] is None  :
                     print "result is null for " + ticker
-                    foutNULL.write(ticker + '\n')
+                    foutNULL.write(ticker + ' is null \n')
                 else:
                     if test == 'Y' :
                         countTest = countTest + 1
@@ -115,48 +115,43 @@ def fetch_Ticker_list():
     localFile2 = "NASDAQ_Other.txt"
     remoteFile1 = "nasdaqlisted.txt"
     remoteFile2 = "otherlisted.txt"
-
+    num_lines_NASDAQ = sum(1 for line in open(prefix + localFile1))
+    num_lines_Other = sum(1 for line in open(prefix + localFile2))
     fetch_file(remoteFile1, localFile1, eastern_time.strftime(fmt))
     fetch_file(remoteFile2, localFile2, eastern_time.strftime(fmt))
+    stockTicker = ["NASDAQstockTicker.txt", "NASDAQTeststockTicker.txt", "NASDAQNULLstockTicker.txt"]
+    num_lines_NASDAQstock = 2
+    for i in range(0,3):
+        if os.path.isfile(prefix + stockTicker[i]):
+            num_lines_NASDAQstock += sum(1 for line in open(prefix + stockTicker[i]))
 
-    stockTicker1 = "NASDAQstockTicker.txt"
-    stockTicker2 = "NASDAQTeststockTicker.txt"
-    stockTickerNULL =  "NULLstockTicker.txt"
-    exit1 = check.checkFile(stockTicker1, prefix )
-    exit2 = check.checkFile(stockTicker2, prefix )
 
-
-    if exit1 == False or exit2 == False or os.stat(prefix + stockTicker1).st_size == 0 or os.stat(prefix + stockTicker2).st_size == 0:
-        fout1 = open(prefix + stockTicker1, 'w')
-        fout2 = open(prefix + stockTicker2, 'w')
-        foutNULL = open(prefix + stockTickerNULL, 'a')
+    if num_lines_NASDAQ != num_lines_NASDAQstock :
+        fout1 = open(prefix + stockTicker[0], 'w')
+        fout2 = open(prefix + stockTicker[1], 'w')
+        foutNULL = open(prefix + stockTicker[2], 'w')
         getNASDAQTicker(fout1, fout2, foutNULL, prefix  + localFile1)
         fout1.close()
         fout2.close()
         foutNULL.close()
 
+    stockTicker = ["NYSEMKTstockTicker.txt", "NYSEstockTicker.txt", "NYSEARCAstockTicker.txt", "BATSstockTicker.txt", "OtherTeststockTicker.txt","NULLOtherstockTicker.txt"]
 
-    stockTicker1 = "NYSEMKTstockTicker.txt"
-    stockTicker2 = "NYSEstockTicker.txt"
-    stockTicker3 = "NYSEARCAstockTicker.txt"
-    stockTicker4 = "BATSstockTicker.txt"
-    stockTicker5 = "OtherTeststockTicker.txt"
+    num_lines_OtherStock = 2
 
-    count = 0
+    for i in range(0,6):
+        if os.path.isfile(prefix + stockTicker[i]):
+            num_lines_OtherStock += sum(1 for line in open(prefix + stockTicker[i]))
 
-    for filename in os.listdir(prefix ):
-        if filename == stockTicker1 or filename == stockTicker2 or filename == stockTicker3 or filename == stockTicker4 or filename == stockTicker5:
-            count = count + 1
-        if count == 5:
-            break
 
-    if count < 5 or os.stat(prefix + stockTicker1).st_size == 0 or os.stat(prefix + stockTicker2).st_size == 0 or os.stat(prefix + stockTicker3).st_size == 0 or os.stat(prefix + stockTicker4).st_size == 0 or os.stat(prefix + stockTicker5).st_size == 0:
-        fout1 = open(prefix  + stockTicker1, 'w')
-        fout2 = open(prefix  + stockTicker2, 'w')
-        fout3 = open(prefix  + stockTicker3, 'w')
-        fout4 = open(prefix  + stockTicker4, 'w')
-        fout5 = open(prefix  + stockTicker5, 'w')
-        foutNULL = open(prefix  + stockTickerNULL, 'a')
+
+    if num_lines_Other != num_lines_OtherStock :
+        fout1 = open(prefix  + stockTicker[0], 'w')
+        fout2 = open(prefix  + stockTicker[1], 'w')
+        fout3 = open(prefix  + stockTicker[2], 'w')
+        fout4 = open(prefix  + stockTicker[3], 'w')
+        fout5 = open(prefix  + stockTicker[4], 'w')
+        foutNULL = open(prefix  + stockTicker[5], 'w')
         getOtherTicker(fout1, fout2, fout3, fout4, fout5, foutNULL, prefix  + localFile2)
         fout1.close()
         fout2.close()
