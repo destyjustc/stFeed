@@ -8,7 +8,7 @@ import sys
 import csv
 import argparse
 import urllib2
-
+ 
 
 def getRealTimeDataJSON(tickers, interval):
     eastern_time = datetime.now(timezone('US/Eastern'))
