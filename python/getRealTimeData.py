@@ -62,12 +62,13 @@ def getRealTimeDataCSV(tickers, interval):
     query = query[0:-1]
     query += sufix
     data = urllib2.urlopen(query)
-    filename = "../data/tmp/"+eastern_time.strftime("%Y_%m_%d_%H_%M_%S")
-    f = open(filename, "w")
-    f.write("Symbol,Ask,Bid,Range,Ask size,Bid size,Volume,Last Trade Size,Last Trade Date,Last Trade Time,name\n")
-    f.write(data.read())
-    f.close()
-    cr = csv.reader(open(filename))
+    #filename = "../data/tmp/"+eastern_time.strftime("%Y_%m_%d_%H_%M_%S")
+    #f = open(filename, "w")
+    #f.write("Symbol,Ask,Bid,Range,Ask size,Bid size,Volume,Last Trade Size,Last Trade Date,Last Trade Time,name\n")
+    #f.write(data.read())
+    #f.close()
+    #cr = csv.reader(open(filename))
+    cr = csv.reader(data)
     count = 0
     print "Get data at " + eastern_time.strftime(fmt)
     for row in cr:
