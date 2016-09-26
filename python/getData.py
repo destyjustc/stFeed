@@ -38,7 +38,7 @@ def getDataCSV(stockList, stockTicker):
     listSize = 200
     s_list = stockList
     prefix = "http://finance.yahoo.com/d/quotes.csv?s="
-    sufix = "&f=sabma5b6vk3ln"
+    sufix = "&f=sabma5b6vk3lm3m4"
     eastern_time = datetime.now(timezone('US/Eastern'))
     folder = eastern_time.strftime('%Y_%m_%d')
     check.checkFolder(folder, "../data/")
@@ -55,7 +55,7 @@ def getDataCSV(stockList, stockTicker):
         if not (check.checkFile(filename, folder)):
             f = open(folder + filename, 'w')
             response = urllib2.urlopen(query)
-            f.write("Symbol,Ask,Bid,Range,AskSize,BidSize,Volume,LastTradeSize,LastTradeWithTime,Name\n")
+            f.write("Symbol,Ask,Bid,Range,AskSize,BidSize,Volume,LastTradeSize,LastTradeWithTime,Average50Days,Average200Days\n")
             f.write(response.read())
             f.close()
 

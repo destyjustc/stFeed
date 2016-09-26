@@ -50,7 +50,7 @@ def getRealTimeDataCSV(tickers, interval):
     eastern_time = datetime.now(timezone('US/Eastern'))
     fmt = "%Y-%m-%d %H:%M:%S %Z%z"
     prefix = "http://finance.yahoo.com/d/quotes.csv?s="
-    sufix = "&f=sabma5b6vk3ln"
+    sufix = "&f=sabma5b6vk3lm3m4"
     if ',' in tickers :
         ticker_list = tickers.split(',')
     else:
