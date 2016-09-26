@@ -1,0 +1,20 @@
+APD# code: 400 
+ASIX# code: 400 
+COTY# code: 400 
+DFIN# code: 400 
+EFM*
+EMZ*
+APD# code: 400 
+ASIX# code: 400 
+COTY# code: 400 
+DFIN# code: 400 
+EFM*
+EMZ*
+HON# code: 400 
+INN-A*
+KYN-G*
+LKSD# code: 400 
+MNR-A*
+PJS*
+RRD# code: 400 
+VSM# code: 400 

@@ -1,0 +1,14 @@
+APD# error code: 400 
+ASIX# error code: 400 
+COTY# error code: 400 
+DFIN# error code: 400 
+EFM* is null 
+EMZ* is null 
+HON# error code: 400 
+INN-A* is null 
+KYN-G* is null 
+LKSD# error code: 400 
+MNR-A* is null 
+PJS* is null 
+RRD# error code: 400 
+VSM# error code: 400 
