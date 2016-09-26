@@ -8,7 +8,7 @@ import sys
 import csv
 import argparse
 import urllib2
- 
+
 
 def getRealTimeDataJSON(tickers, interval):
     eastern_time = datetime.now(timezone('US/Eastern'))
@@ -21,6 +21,7 @@ def getRealTimeDataJSON(tickers, interval):
         ticker_list = [tickers]
     query = prefix
     for ticker in ticker_list:
+        ticker = ticker.replace(".", '-')
         query  += ticker + '%22%2C%22'
     query = query[0:-9]
     query += sufix
@@ -41,33 +42,40 @@ def getRealTimeDataJSON(tickers, interval):
                 if data[i]["Ask"] is None:
                     print data[i]["Symbol"] + ": no data"
                 else:
-                    #print data[i]
-                    print data[i]["Symbol"] + " Ask : " + data[i]["Ask"] + " Bid : " + data[i]["Bid"]
+                   # print data[i]
+                    print data[i]["Symbol"] + " Ask : " + data[i]["Ask"] + " Bid : " + data[i]["Bid"] + " High: " + data[i]["DaysHigh"] + " Low: " + data[i]["DaysLow"]
     threading.Timer(interval, getRealTimeDataJSON, [tickers, interval]).start()
 
 def getRealTimeDataCSV(tickers, interval):
     eastern_time = datetime.now(timezone('US/Eastern'))
     fmt = "%Y-%m-%d %H:%M:%S %Z%z"
     prefix = "http://finance.yahoo.com/d/quotes.csv?s="
-    sufix = "&f=sabd1t1b1b2k1n"
+    sufix = "&f=sabma5b6vk3d1t1n"
     if ',' in tickers :
         ticker_list = tickers.split(',')
     else:
         ticker_list = [tickers]
     query = prefix
     for ticker in ticker_list:
+        ticker = ticker.replace(".", "-")
         query  += ticker + '+'
     query = query[0:-1]
     query += sufix
     data = urllib2.urlopen(query)
-    cr = csv.reader(data)
+    filename = "../data/tmp/"+eastern_time.strftime("%Y_%m_%d_%H_%M_%S")
+    f = open(filename, "w")
+    f.write("Symbol,Ask,Bid,Range,Ask size,Bid size,Volume,Last Trade Size,Last Trade Date,Last Trade Time,name\n")
+    f.write(data.read())
+    f.close()
+    cr = csv.reader(open(filename))
     count = 0
     print "Get data at " + eastern_time.strftime(fmt)
     for row in cr:
-        if row[0] == "N/A":
+        if row[0] == "N/A" :
             print "No data for " + ticker_list[count]
         else:
-            print  row[0] + " Ask:" + row[1] + " Bid:" + row[2] + ' Last trade time and date: ' + row[3] + " " + row[4] + " Realtime  Ask : " + row[5] + " Realtime Bid : " + row[6] +  ' Last trade realtime: ' + row[7] + " " +row[8]
+           # print  row[0] + " Ask:" + row[1] + " Bid:" + row[2] + ' Last trade time and date: ' + row[3] + " " + row[4] + " Low : " + row[5] + " High: " + row[6] +  ' Last trade with time: ' + row[7] + " " +row[8]
+            print row
         count = count + 1;
     threading.Timer(interval, getRealTimeDataCSV, [tickers, interval]).start()
 
@@ -84,8 +92,8 @@ def main(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('-t', type=str, default="AAPL,GOOG")
-    parser.add_argument('-i', type=int, default= 60)
+    parser.add_argument('-t', type=str, default="AAPL,EZR,GE,TSLA,BRK.B,SBUX")
+    parser.add_argument('-i', type=int, default= 20)
     parser.add_argument('-f', type=str, default= "CSV")
     args = parser.parse_args()
 
