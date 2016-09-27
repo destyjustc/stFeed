@@ -84,7 +84,7 @@ def init(interval):
         fetch_Ticker_lists.fetch_Ticker_list()
     threading.Timer(interval, init, [interval]).start()
     stockTickerList = ["NASDAQ", "NASDAQTest", "NYSE", "NYSEARCA", "NYSEMKT", "BATS", "OtherTest" ]
-    if not(eastern_time.date() in holidays) and (eastern_time.isoweekday() in range(1, 6)) and timenow >= 4 and timenow <= 24:
+    if not(eastern_time.date() in holidays) and (eastern_time.isoweekday() in range(1, 6)) and timenow >= 4 and timenow <= 20:
         for i in range(0,6) :
             stockTicker = stockTickerList[i]
             print "Get data from " + stockTicker + ' @ ' + eastern_time.strftime(fmt)
