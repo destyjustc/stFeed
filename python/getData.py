@@ -43,7 +43,7 @@ def getDataCSV(stockList, stockTicker):
     folder = eastern_time.strftime('%Y_%m_%d')
     check.checkFolder(folder, "../data/")
     check.checkFolder(stockTicker, "../data/" + folder + "/")
-    folder = "../data/" + folder + '/' + stockTicker + '/'
+    folder = "../../data/" + folder + '/' + stockTicker + '/'
     for j in range(0, len(stockList) / listSize + 1):
         query = prefix
         for i in s_list[listSize * j:min(listSize * (j + 1), len(stockList))]:
@@ -63,7 +63,7 @@ def getDataCSV(stockList, stockTicker):
 
 # getData(stockList)
 def getStockList(stockTicker, eastern_time):
-    filename = "../data/list/" + eastern_time.strftime('%Y_%m_%d') + '/' + stockTicker  + "stockTicker.txt"
+    filename = "../../stData/list/" + eastern_time.strftime('%Y_%m_%d') + '/' + stockTicker  + "stockTicker.txt"
     f = open(filename, 'r')
     content = f.readlines()
     ret = []
@@ -84,7 +84,7 @@ def init(interval):
         fetch_Ticker_lists.fetch_Ticker_list()
     threading.Timer(interval, init, [interval]).start()
     stockTickerList = ["NASDAQ", "NASDAQTest", "NYSE", "NYSEARCA", "NYSEMKT", "BATS", "OtherTest" ]
-    if not(eastern_time.date() in holidays) and (eastern_time.isoweekday() in range(1, 6)) and timenow >= 4 and timenow <= 20:
+    if not(eastern_time.date() in holidays) and (eastern_time.isoweekday() in range(1, 6)) and timenow >= 4 and timenow <= 24:
         for i in range(0,6) :
             stockTicker = stockTickerList[i]
             print "Get data from " + stockTicker + ' @ ' + eastern_time.strftime(fmt)

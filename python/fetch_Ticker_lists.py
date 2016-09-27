@@ -6,7 +6,7 @@ import requests
 import check
 
 def fetch_file(remoteFile, localFile, folder):
-    prefix = '../data/list/'
+    prefix = '../../stData/list/'
     check.checkFolder(folder, prefix)
     ftp = ftplib.FTP("ftp.nasdaqtrader.com")
     ftp.login()
@@ -112,7 +112,7 @@ def getOtherTicker(fout1, fout2, fout3, fout4, fout5, foutNULL, filename):
 def fetch_Ticker_list():
     eastern_time = datetime.now(timezone('US/Eastern'))
     fmt = '%Y_%m_%d'
-    prefix = '../data/list/' + eastern_time.strftime(fmt) + '/'
+    prefix = '../../stData/list/' + eastern_time.strftime(fmt) + '/'
     localFile1 = "NASDAQ.txt"
     localFile2 = "NASDAQ_Other.txt"
     remoteFile1 = "nasdaqlisted.txt"
