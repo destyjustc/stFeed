@@ -17,7 +17,7 @@ def getHistoricalData(market, tickerList):
             history_file.write(response.read())
             history_file.close()
         except Exception, e:
-            print e.code + e.msg
+            print str(e.code) + ":" + e.msg
             pass
 
 def getTodayData(market, ticker):
