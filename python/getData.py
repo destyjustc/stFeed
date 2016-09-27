@@ -18,8 +18,8 @@ def getDataJSON(stockList, stockTicker):
     sufix = "%22)%0A%09%09&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback="
     eastern_time = datetime.now(timezone('US/Eastern'))
     folder = eastern_time.strftime('%Y_%m_%d')
-    check.checkFolder(folder, "../data/")
-    check.checkFolder(stockTicker, "../data/" + folder + "/")
+    check.checkFolder(folder, "../../stData/")
+    check.checkFolder(stockTicker, "../../stData/" + folder + "/")
     folder = "../data/" + folder + '/' + stockTicker + '/'
     for j in range(0, len(stockList) / listSize + 1):
         query = prefix
@@ -41,8 +41,8 @@ def getDataCSV(stockList, stockTicker):
     sufix = "&f=sabma5b6vk3lm3m4"
     eastern_time = datetime.now(timezone('US/Eastern'))
     folder = eastern_time.strftime('%Y_%m_%d')
-    check.checkFolder(folder, "../data/")
-    check.checkFolder(stockTicker, "../data/" + folder + "/")
+    check.checkFolder(folder, "../../stData/")
+    check.checkFolder(stockTicker, "../../stData/" + folder + "/")
     folder = "../../data/" + folder + '/' + stockTicker + '/'
     for j in range(0, len(stockList) / listSize + 1):
         query = prefix
