@@ -4,7 +4,7 @@ import urllib
 import csv
 from pprint import pprint
 import matplotlib.pyplot as plt
-prefix = '../data/'
+prefix = '../../stData/'
 mtime = lambda f: os.stat(os.path.join(prefix, f)).st_mtime
 
 folder_list =  list(sorted(os.listdir(prefix), key=mtime))
@@ -13,7 +13,7 @@ bid_list = list()
 time_list = list()
 for folder in folder_list :
     if os.path.isdir(prefix+folder) :
-        path = '../data/' + folder + '/NASDAQ/' + folder
+        path = '../../stData/' + folder + '/NASDAQ/' + folder
         timepoint_list = sorted(glob.glob(path + "*part1.csv" ))
         for timepoint in timepoint_list:
             file_list = glob.glob(timepoint[:-5] +'*')
