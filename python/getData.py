@@ -93,7 +93,7 @@ def init(interval):
                 stockList = getStockList(stockTicker, eastern_time)
                 getHistoricalData.getHistoricalData(stockTicker, stockList)
         else:
-            print "No need for update historical data" +' @ ' + eastern_time.strftime(fmt)
+            print "No need for updating the historical data" +' @ ' + eastern_time.strftime(fmt)
     threading.Timer(interval, init, [interval]).start()
     if not(eastern_time.date() in holidays) and (eastern_time.isoweekday() in range(1, 6)) and timenow >= 4 and timenow <= 20:
         for i in range(0,6) :
