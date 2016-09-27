@@ -18,13 +18,10 @@ def getHistoricalData(market, tickerList):
         try:
             response = urllib2.urlopen(url)
             filename = '../../stData/historicalData/' + market + '/' + ticker + '.csv'
-            if totimestamp(datetime.now()) - totimestamp(datetime.fromtimestamp(os.path.getmtime(filename)))  > 86400:
-                print url
-                history_file = open(filename, 'w')
-                history_file.write(response.read())
-                history_file.close()
-          #  else:
-           #     print "No need to update for " + ticker
+            print url
+            history_file = open(filename, 'w')
+            history_file.write(response.read())
+            history_file.close()
         except Exception, e:
             print str(e.code) + ":" + e.msg
             pass

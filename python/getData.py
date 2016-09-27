@@ -10,7 +10,8 @@ from pandas.tseries.holiday import USFederalHolidayCalendar as calendar
 import fetch_Ticker_lists
 import check
 import urllib2
-from getHistoricalData import getHistoricalData
+import getHistoricalData
+import os
 
 def getDataJSON(stockList, stockTicker):
     listSize = 500
@@ -84,10 +85,15 @@ def init(interval):
     stockTickerList = ["NASDAQ", "NASDAQTest", "NYSE", "NYSEARCA", "NYSEMKT", "BATS", "OtherTest"]
     if not(eastern_time.date() in holidays) and (eastern_time.isoweekday() in range(1, 6)) and timenow >= 0 and timenow <= 4 :
         fetch_Ticker_lists.fetch_Ticker_list()
-        for i in range(0, 6):
-            stockTicker = stockTickerList[i]
-            stockList = getStockList(stockTicker, eastern_time)
-            getHistoricalData(stockTicker, stockList)
+        filename = '../../stData/historicalData/NASDAQ/AAPL.csv'
+        if getHistoricalData.totimestamp(datetime.now()) - getHistoricalData.totimestamp(
+                datetime.fromtimestamp(os.path.getmtime(filename))) > 86400:
+            for i in range(0, 6):
+                stockTicker = stockTickerList[i]
+                stockList = getStockList(stockTicker, eastern_time)
+                getHistoricalData.getHistoricalData(stockTicker, stockList)
+        else:
+            print "No need for update historical data" +' @ ' + eastern_time.strftime(fmt)
     threading.Timer(interval, init, [interval]).start()
     if not(eastern_time.date() in holidays) and (eastern_time.isoweekday() in range(1, 6)) and timenow >= 4 and timenow <= 20:
         for i in range(0,6) :
