@@ -10,6 +10,7 @@ from pandas.tseries.holiday import USFederalHolidayCalendar as calendar
 import fetch_Ticker_lists
 import check
 import urllib2
+from getHistoricalData import getHistoricalData
 
 def getDataJSON(stockList, stockTicker):
     listSize = 500
@@ -80,10 +81,14 @@ def init(interval):
     holidays = cal.holidays(start='2014-01-01', end='2020-12-31').to_pydatetime()
     fmt = "%Y-%m-%d %H:%M:%S %Z%z"
     timenow = eastern_time.hour + float(eastern_time.minute) / 60
+    stockTickerList = ["NASDAQ", "NASDAQTest", "NYSE", "NYSEARCA", "NYSEMKT", "BATS", "OtherTest"]
     if not(eastern_time.date() in holidays) and (eastern_time.isoweekday() in range(1, 6)) and timenow >= 0 and timenow <= 4 :
         fetch_Ticker_lists.fetch_Ticker_list()
+        for i in range(0, 6):
+            stockTicker = stockTickerList[i]
+            stockList = getStockList(stockTicker, eastern_time)
+            getHistoricalData(stockTicker, stockList)
     threading.Timer(interval, init, [interval]).start()
-    stockTickerList = ["NASDAQ", "NASDAQTest", "NYSE", "NYSEARCA", "NYSEMKT", "BATS", "OtherTest" ]
     if not(eastern_time.date() in holidays) and (eastern_time.isoweekday() in range(1, 6)) and timenow >= 4 and timenow <= 20:
         for i in range(0,6) :
             stockTicker = stockTickerList[i]

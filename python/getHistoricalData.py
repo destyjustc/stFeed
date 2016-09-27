@@ -1,27 +1,36 @@
 #!/usr/bin/env python
 
 import urllib2
-from datetime import datetime
+from datetime import datetime, timedelta
 from pytz import timezone
-from getData import getStockList
+import os.path, time
+
+def totimestamp(dt, epoch=datetime(1970,1,1)):
+    td = dt - epoch
+    # return td.total_seconds()
+    return (td.microseconds + (td.seconds + td.days * 86400) * 10**6) / 10**6
 
 def getHistoricalData(market, tickerList):
     prefix = 'http://ichart.finance.yahoo.com/table.csv?s='
     suffix = '&g=d&ignore=.csv'
     for ticker in tickerList:
         url = prefix + ticker + suffix
-        print url
         try:
             response = urllib2.urlopen(url)
-            history_file = open('../../stData/historicalData/' + market + '/' + ticker + '.csv', 'w')
-            history_file.write(response.read())
-            history_file.close()
+            filename = '../../stData/historicalData/' + market + '/' + ticker + '.csv'
+            if totimestamp(datetime.now()) - totimestamp(datetime.fromtimestamp(os.path.getmtime(filename)))  > 86400:
+                print url
+                history_file = open(filename, 'w')
+                history_file.write(response.read())
+                history_file.close()
+          #  else:
+           #     print "No need to update for " + ticker
         except Exception, e:
             print str(e.code) + ":" + e.msg
             pass
 
 def getTodayData(market, ticker):
-    eastern_time = datetime.now(timezone('US/Pacific'))
+    eastern_time = datetime.now(timezone('US/Eastern'))
     fmt = "%Y-%m-%d"
     date = eastern_time.strftime(fmt)
     print date
@@ -43,12 +52,13 @@ def getTodayData(market, ticker):
     history_file.write(historyData)
     history_file.close()
 
-stockMarketList = ["NASDAQ", "NASDAQTest", "NYSE", "NYSEARCA", "NYSEMKT", "BATS", "OtherTest" ]
 
-for i in range(0, 6):
-    stockMarket = stockMarketList[i]
-    eastern_time = datetime.now(timezone('US/Pacific'))
-    fmt = "%Y-%m-%d"
-    print "Get data from " + stockMarket + ' @ ' + eastern_time.strftime(fmt)
-    stockList = getStockList(stockMarket, eastern_time)
-    getHistoricalData(stockMarket, stockList)
+
+#stockMarketList = ["NASDAQ", "NASDAQTest", "NYSE", "NYSEARCA", "NYSEMKT", "BATS", "OtherTest" ]
+#for i in range(0, 6):
+#    stockMarket = stockMarketList[i]
+#    eastern_time = datetime.now(timezone('US/Pacific'))
+#    fmt = "%Y-%m-%d"
+#    print "Get data from " + stockMarket + ' @ ' + eastern_time.strftime(fmt)
+#    stockList = getStockList(stockMarket, eastern_time)
+#    getHistoricalData(stockMarket, stockList)
