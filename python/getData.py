@@ -20,7 +20,7 @@ def getDataJSON(stockList, stockTicker):
     folder = eastern_time.strftime('%Y_%m_%d')
     check.checkFolder(folder, "../../stData/")
     check.checkFolder(stockTicker, "../../stData/" + folder + "/")
-    folder = "../data/" + folder + '/' + stockTicker + '/'
+    folder = "../../stData/" + folder + '/' + stockTicker + '/'
     for j in range(0, len(stockList) / listSize + 1):
         query = prefix
         for i in s_list[listSize*j:min(listSize*(j+1),len(stockList))]:
@@ -43,7 +43,7 @@ def getDataCSV(stockList, stockTicker):
     folder = eastern_time.strftime('%Y_%m_%d')
     check.checkFolder(folder, "../../stData/")
     check.checkFolder(stockTicker, "../../stData/" + folder + "/")
-    folder = "../../data/" + folder + '/' + stockTicker + '/'
+    folder = "../../stData/" + folder + '/' + stockTicker + '/'
     for j in range(0, len(stockList) / listSize + 1):
         query = prefix
         for i in s_list[listSize * j:min(listSize * (j + 1), len(stockList))]:
