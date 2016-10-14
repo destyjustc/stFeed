@@ -112,6 +112,7 @@ def init(interval):
 
 
 if __name__ == "__main__":
+    fmt = "%Y-%m-%d %H:%M:%S %Z%z"
     yag = yagmail.SMTP('edmondsbasketball@gmail.com', 'YangYong0911')
     # yag.send('michaelzhang917@gmail.com', 'test', 'test')
     contents = ["Historical data is updated @" + datetime.now(timezone('US/Eastern')).strftime(fmt)]
