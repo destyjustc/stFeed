@@ -1,11 +1,17 @@
-import json
+import ftplib
 import os, glob
-import urllib
 import csv
+import tensorflow
 from pprint import pprint
 import matplotlib.pyplot as plt
 prefix = '../../stData/'
 mtime = lambda f: os.stat(os.path.join(prefix, f)).st_mtime
+
+
+ftp = ftplib.FTP("192.168.0.35")
+ftp.login("user", "password")
+ftp.cwd("Documents/stData")
+
 
 folder_list =  list(sorted(os.listdir(prefix), key=mtime))
 ask_list = list()

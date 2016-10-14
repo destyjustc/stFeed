@@ -12,6 +12,7 @@ import check
 import urllib2
 import getHistoricalData
 import os
+import yagmail
 
 def getDataJSON(stockList, stockTicker):
     listSize = 500
@@ -92,6 +93,10 @@ def init(interval):
                 stockTicker = stockTickerList[i]
                 stockList = getStockList(stockTicker, eastern_time)
                 getHistoricalData.getHistoricalData(stockTicker, stockList)
+            yag = yagmail.SMTP('edmondsbasketball@gmail.com', 'YangYong0911')
+            # yag.send('michaelzhang917@gmail.com', 'test', 'test')
+            contents = ["Historical data is updated @" + datetime.now(timezone('US/Eastern')).strftime(fmt)]
+            yag.send('michaelzhang917@gmail.com', 'Historical data is updated', contents=contents)
         else:
             print "No need for updating the historical data" +' @ ' + eastern_time.strftime(fmt)
     threading.Timer(interval, init, [interval]).start()
