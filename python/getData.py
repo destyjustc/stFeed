@@ -94,7 +94,6 @@ def init(interval):
                 stockList = getStockList(stockTicker, eastern_time)
                 getHistoricalData.getHistoricalData(stockTicker, stockList)
             yag = yagmail.SMTP('edmondsbasketball@gmail.com', 'YangYong0911')
-            # yag.send('michaelzhang917@gmail.com', 'test', 'test')
             contents = ["Historical data is updated @" + datetime.now(timezone('US/Eastern')).strftime(fmt)]
             yag.send('michaelzhang917@gmail.com', 'Historical data is updated', contents=contents)
         else:
@@ -110,12 +109,6 @@ def init(interval):
         print 'Market is closed now and current time is ' +  eastern_time.strftime(fmt)
 
 
-
 if __name__ == "__main__":
-    fmt = "%Y-%m-%d %H:%M:%S %Z%z"
-    yag = yagmail.SMTP('edmondsbasketball@gmail.com', 'YangYong0911')
-    # yag.send('michaelzhang917@gmail.com', 'test', 'test')
-    contents = ["Historical data is updated @" + datetime.now(timezone('US/Eastern')).strftime(fmt)]
-    yag.send('michaelzhang917@gmail.com', 'Historical data is updated', contents=contents)
     init(60)
 
