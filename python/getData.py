@@ -87,9 +87,6 @@ def init(interval):
     if not(eastern_time.date() in holidays) and (eastern_time.isoweekday() in range(1, 6)) and timenow >= 0 and timenow <= 4 :
         fetch_Ticker_lists.fetch_Ticker_list()
         filename = '../../stData/historicalData/NASDAQ/AAPL.csv'
-        yag = yagmail.SMTP('edmondsbasketball@gmail.com', 'YangYong0911')
-        contents = ["Historical data is updated @" + datetime.now(timezone('US/Eastern')).strftime(fmt)]
-        yag.send('michaelzhang917@gmail.com', 'Historical data is updated', contents=contents)
         if getHistoricalData.totimestamp(datetime.now()) - getHistoricalData.totimestamp(
                 datetime.fromtimestamp(os.path.getmtime(filename))) > 86400:
             for i in range(0, 6):
