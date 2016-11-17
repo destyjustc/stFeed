@@ -53,6 +53,9 @@ def getNASDAQTicker(fout1, fout2, foutNULL, filename):
                     countNASDAQ = countNASDAQ + 1
                     print "NASDAQ ticker %d : %s " % (countNASDAQ, ticker)
                     fout1.write(ticker + '\n')
+        except KeyError as e:
+            logging.warning(ticker + ':' + e.message)
+            pass
         except ValueError as e:
             logging.warning(ticker+':'+ e.message)
             pass
@@ -112,14 +115,15 @@ def getOtherTicker(fout1, fout2, fout3, fout4, fout5, foutNULL, filename):
                             countBATS = countBATS + 1
                             print "BATS ticker %d : %s " % (countBATS, ticker)
                             fout4.write(ticker + '\n')
+        except KeyError as e:
+            logging.warning(ticker + ':' + e.message)
+            pass
         except ValueError as e:
-            print e
+            logging.warning(ticker + ':' + e.message)
             pass
-        except requests.exceptions.RequestException as e:
-            print e
+        except requests.exceptions.RequestException  as e:
+            logging.warning(ticker + ':' + e.message)
             pass
-
-
 
 def fetch_Ticker_list():
     eastern_time = datetime.now(timezone('US/Eastern'))
