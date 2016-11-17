@@ -12,7 +12,10 @@ def totimestamp(dt, epoch=datetime(1970,1,1)):
     return (td.microseconds + (td.seconds + td.days * 86400) * 10**6) / 10**6
 
 def getHistoricalData(market, tickerList):
-    logging.basicConfig(filename='getHistoricalData.log', level=logging.WARNING)
+    eastern_time = datetime.now(timezone('US/Eastern'))
+    fmt = "%Y-%m-%d"
+    date = eastern_time.strftime(fmt)
+    logging.basicConfig(filename='logs/getHistoricalData_' + date + '.log', level=logging.WARNING)
     prefix = 'http://ichart.finance.yahoo.com/table.csv?s='
     suffix = '&g=d&ignore=.csv'
     for ticker in tickerList:

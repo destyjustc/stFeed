@@ -6,7 +6,10 @@ import requests
 import check
 import logging
 
-logging.basicConfig(filename='fetch_Ticker_lists.log', level=logging.WARNING)
+eastern_time = datetime.now(timezone('US/Eastern'))
+fmt = "%Y-%m-%d"
+date = eastern_time.strftime(fmt)
+logging.basicConfig(filename='logs/fetch_Ticker_lists_' + date + '.log', level=logging.WARNING)
 
 def fetch_file(remoteFile, localFile, folder):
     prefix = '../../stData/list/'
