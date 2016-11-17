@@ -15,7 +15,8 @@ def getHistoricalData(market, tickerList):
     eastern_time = datetime.now(timezone('US/Eastern'))
     fmt = "%Y-%m-%d"
     date = eastern_time.strftime(fmt)
-    logging.basicConfig(filename='logs/getHistoricalData_' + date + '.log', level=logging.WARNING)
+    FORMAT = '%(asctime)-15s %(message)s'
+    logging.basicConfig(filename='logs/getHistoricalData_' + date + '.log', level=logging.WARNING, format=FORMAT)
     prefix = 'http://ichart.finance.yahoo.com/table.csv?s='
     suffix = '&g=d&ignore=.csv'
     for ticker in tickerList:

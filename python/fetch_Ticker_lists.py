@@ -9,7 +9,8 @@ import logging
 eastern_time = datetime.now(timezone('US/Eastern'))
 fmt = "%Y-%m-%d"
 date = eastern_time.strftime(fmt)
-logging.basicConfig(filename='logs/fetch_Ticker_lists_' + date + '.log', level=logging.WARNING)
+FORMAT = '%(asctime)-15s %(message)s'
+logging.basicConfig(filename='logs/fetch_Ticker_lists_' + date + '.log', level=logging.WARNING, format=FORMAT)
 
 def fetch_file(remoteFile, localFile, folder):
     prefix = '../../stData/list/'
