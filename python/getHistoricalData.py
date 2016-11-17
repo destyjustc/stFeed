@@ -4,6 +4,7 @@ import urllib2
 from datetime import datetime, timedelta
 from pytz import timezone
 import os.path, time
+import logging
 
 def totimestamp(dt, epoch=datetime(1970,1,1)):
     td = dt - epoch
@@ -11,6 +12,7 @@ def totimestamp(dt, epoch=datetime(1970,1,1)):
     return (td.microseconds + (td.seconds + td.days * 86400) * 10**6) / 10**6
 
 def getHistoricalData(market, tickerList):
+    logging.basicConfig(filename='getHistoricalData.log', level=logging.WARNING)
     prefix = 'http://ichart.finance.yahoo.com/table.csv?s='
     suffix = '&g=d&ignore=.csv'
     for ticker in tickerList:
@@ -18,12 +20,12 @@ def getHistoricalData(market, tickerList):
         try:
             response = urllib2.urlopen(url)
             filename = '../../stData/historicalData/' + market + '/' + ticker + '.csv'
-            print url
+            logging.info(url)
             history_file = open(filename, 'w')
             history_file.write(response.read())
             history_file.close()
         except Exception, e:
-            print e
+            logging.warning(ticker + ' :' + e.message)
             pass
 
 def getTodayData(market, ticker):

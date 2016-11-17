@@ -4,6 +4,9 @@ import os
 import ftplib
 import requests
 import check
+import logging
+
+logging.basicConfig(filename='fetch_Ticker_lists.log', level=logging.WARNING)
 
 def fetch_file(remoteFile, localFile, folder):
     prefix = '../../stData/list/'
@@ -19,6 +22,7 @@ def fetch_file(remoteFile, localFile, folder):
     ftp.quit()
 
 def getNASDAQTicker(fout1, fout2, foutNULL, filename):
+
     countNASDAQ = 0
     countNASDAQtest = 0
     prefix = "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.quotes%20where%20symbol%20in%20(%22"
@@ -47,10 +51,10 @@ def getNASDAQTicker(fout1, fout2, foutNULL, filename):
                     print "NASDAQ ticker %d : %s " % (countNASDAQ, ticker)
                     fout1.write(ticker + '\n')
         except ValueError as e:
-            print e
+            logging.warning(ticker+':'+ e.message)
             pass
         except requests.exceptions.RequestException  as e:
-            print e
+            logging.warning(ticker+ ':' + e.message)
             pass
 
 def getOtherTicker(fout1, fout2, fout3, fout4, fout5, foutNULL, filename):
