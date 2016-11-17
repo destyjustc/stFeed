@@ -46,10 +46,12 @@ def getNASDAQTicker(fout1, fout2, foutNULL, filename):
                     countNASDAQ = countNASDAQ + 1
                     print "NASDAQ ticker %d : %s " % (countNASDAQ, ticker)
                     fout1.write(ticker + '\n')
-        except requests.exceptions.RequestException as e:
+        except ValueError as e:
             print e
             pass
-
+        except requests.exceptions.RequestException  as e:
+            print e
+            pass
 
 def getOtherTicker(fout1, fout2, fout3, fout4, fout5, foutNULL, filename):
     countNYSEMKT = 0
