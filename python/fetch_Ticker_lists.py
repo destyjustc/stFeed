@@ -105,6 +105,9 @@ def getOtherTicker(fout1, fout2, fout3, fout4, fout5, foutNULL, filename):
                             countBATS = countBATS + 1
                             print "BATS ticker %d : %s " % (countBATS, ticker)
                             fout4.write(ticker + '\n')
+        except ValueError as e:
+            print e
+            pass
         except requests.exceptions.RequestException as e:
             print e
             pass
