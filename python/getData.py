@@ -80,7 +80,7 @@ def getStockList(stockTicker, eastern_time):
 def init(interval):
     eastern_time = datetime.now(timezone('US/Eastern'))
     cal = calendar()
-    holidays = cal.holidays(start='2014-01-01', end='2020-12-31').to_pydatetime()
+    holidays = cal.holidays(start='2014-01-01', end='2020-12-31')
     fmt = "%Y-%m-%d %H:%M:%S %Z%z"
     timenow = eastern_time.hour + float(eastern_time.minute) / 60
     stockTickerList = ["NASDAQ", "NASDAQTest", "NYSE", "NYSEARCA", "NYSEMKT", "BATS", "OtherTest"]
